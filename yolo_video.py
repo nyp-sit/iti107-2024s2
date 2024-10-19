@@ -1,10 +1,8 @@
+from ultralytics import YOLO
 import cv2
 
-from ultralytics import YOLO
-from matplotlib import pyplot as plt
-
 # Load the YOLO model
-model = YOLO("best.pt", task="detection")
+model = YOLO("best_int8_openvino_model")
 
 # Open the video file
 video_path = "balloon.mp4"
@@ -17,20 +15,17 @@ while cap.isOpened():
 
     if success:
         # Run YOLO inference on the frame
-        print(frame.shape)
-        plt.imshow(frame)
-        plt.show()
-        # results = model(frame)
+        results = model(frame, device=0)
 
-        # # Visualize the results on the frame
-        # annotated_frame = results[0].plot()
+        # Visualize the results on the frame
+        annotated_frame = results[0].plot()
 
-        # # Display the annotated frame
-        # cv2.imshow("YOLO Inference", annotated_frame)
+        # Display the annotated frame
+        cv2.imshow("YOLO Inference", annotated_frame)
 
-        # # Break the loop if 'q' is pressed
-        # if cv2.waitKey(1) & 0xFF == ord("q"):
-        #     break
+        # Break the loop if 'q' is pressed
+        if cv2.waitKey(1) & 0xFF == ord("q"):
+            break
     else:
         # Break the loop if the end of the video is reached
         break

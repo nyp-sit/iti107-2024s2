@@ -22,7 +22,7 @@ def write_video(video_in_filepath, video_out_filepath, detection_model):
                                fps, 
                                (frame_w, frame_h))
 
-    for i in tqdm(range(nb_frames)):
+    for (range(nb_frames)):
         ret, image_np = video_reader.read()
         # result = detection_model(image_np)
         print(image_np.shape)
@@ -34,24 +34,7 @@ def write_video(video_in_filepath, video_out_filepath, detection_model):
 
         # Display the annotated frame
         cv2.imshow("YOLO Inference", annotated_frame)
-
-        # input_tensor = tf.convert_to_tensor(np.expand_dims(image_np, 0), dtype=tf.uint8)
-        # results = detection_model(input_tensor)
-        # viz_utils.visualize_boxes_and_labels_on_image_array(
-        #           image_np,
-        #           results['detection_boxes'][0].numpy(),
-        #           (results['detection_classes'][0].numpy()+ label_id_offset).astype(int),
-        #           results['detection_scores'][0].numpy(),
-        #           category_index,
-        #           use_normalized_coordinates=True,
-        #           max_boxes_to_draw=200,
-        #           min_score_thresh=.50,
-        #           agnostic_mode=False,
-        #           line_thickness=2)
-
-        # video_writer.write(np.uint8(image_np))
-        video_writer.write(image_np)
-                
+            
     # Release camera and close windows
     video_reader.release()
     video_writer.release() 
