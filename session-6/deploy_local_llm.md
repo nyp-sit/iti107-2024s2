@@ -17,6 +17,8 @@ pip install "huggingface_hub[cli]"
 
 We download our model hosted on huggingface, to a local directory called Llama-3.2-1B-chat-doctor. Replace the model repo ID with your own repo ID.
 
+In your home directory, (e.g. /home/ubuntu), download your model: 
+
 ```bash
 huggingface-cli download --local-dir Llama-3.2-1B-chat-doctor khengkok/Llama-3.2-1B-chat-doctor
 ```
@@ -53,7 +55,7 @@ We will now run the script `convert_hf_to_gguf` found inside the `llama.cpp` dir
 
 ```bash
 cd llama.cpp
-python convert_hf_to_gguf.py --outfile /content/Llama-3.2-1B-chat-doctor.gguf /content/Llama-3.2-1B-chat-doctor
+python convert_hf_to_gguf.py --outfile ~/Llama-3.2-1B-chat-doctor.gguf ~/Llama-3.2-1B-chat-doctor
 ```
 
 ## Quantize the model
@@ -68,14 +70,13 @@ We can use the llama-quantize utility to do this. However, you will need to buil
 cd llama.cpp
 cmake -B build
 cmake --build build --config Release
-cd 
 ```
 
 Now we run the `llama-quantize`, selecting Q4_K_M as the quantization scheme, to quantize our gguf. We will name our quantized model as `Llama-3.2-1B-chat-doctor-Q4_K_M.gguf` to differentiate from the original model.
 
-
+In the `llama.cpp` directory, 
 ```bash
-./llama.cpp/build/bin/llama-quantize /content/Llama-3.2-1B-chat-doctor.gguf  /content/Llama-3.2-1B-chat-doctor-Q4_K_M.gguf Q4_K_M
+./build/bin/llama-quantize ~/Llama-3.2-1B-chat-doctor.gguf  ~/Llama-3.2-1B-chat-doctor-Q4_K_M.gguf Q4_K_M
 ```
 
 ## Upload the model to Hugging Face
@@ -114,6 +115,13 @@ Ollama is a very popular platform to run your local LLM. It exposes OpenAI compa
 
 Follow the instructions [here](https://github.com/ollama/ollama/tree/main) for installation for MacOS, Linux and Windows.
 
+If you are using the GPU instance provided (a Ubuntu instance), use the following command to install Ollama
+
+```
+cd 
+curl -fsSL https://ollama.com/install.sh | sh
+```
+
 
 ### Download your model
 
@@ -122,7 +130,7 @@ Follow the instructions [here](https://github.com/ollama/ollama/tree/main) for i
 2. Create a Modelfile in the same folder with the following content:
 
 ```
-FROM ./Llama-3.2-1b-chat-doctor-Q4_K_M.gguf
+FROM ./Llama-3.2-1B-chat-doctor-Q4_K_M.gguf
 TEMPLATE """{{ if .System }}<|start_header_id|>system<|end_header_id|>
 
 {{ .System }}<|eot_id|>{{ end }}{{ if .Prompt }}<|start_header_id|>user<|end_header_id|>
